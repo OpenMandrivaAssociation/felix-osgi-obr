@@ -2,7 +2,7 @@
 
 Name:           felix-osgi-obr
 Version:        1.0.2
-Release:        4
+Release:        6
 Summary:        Felix OSGi OBR Service API
 
 Group:          Development/Java
