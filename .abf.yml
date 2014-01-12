@@ -1,3 +1,2 @@
 sources:
-  "build.xml.tar.gz:"	b9c7fadc8b6a6313777454cdf8d7c1daa6c4b7a0
-  "org.osgi.service.obr-1.0.2-project.tar.gz:"	43ad58892903d6cdae4d8e1e7e9d48c98ff9d997
+  org.osgi.service.obr-1.0.2-project.tar.gz: 43ad58892903d6cdae4d8e1e7e9d48c98ff9d997

@@ -1,28 +1,28 @@
+%{?_javapackages_macros:%_javapackages_macros}
 %global bundle org.osgi.service.obr
 
 Name:           felix-osgi-obr
 Version:        1.0.2
-Release:        6
+Release:        11.1%{?dist}
 Summary:        Felix OSGi OBR Service API
 
-Group:          Development/Java
 License:        ASL 2.0
 URL:            http://felix.apache.org/site/apache-felix-osgi-bundle-repository.html
 Source0:        http://www.apache.org/dist/felix/org.osgi.service.obr-%{version}-project.tar.gz
-Source1:        build.xml.tar.gz
-BuildRequires:  ant
-BuildRequires:  jpackage-utils
-BuildRequires:  felix-osgi-core
-Requires:       felix-osgi-core
-Requires(post): jpackage-utils
-Requires(postun): jpackage-utils
-BuildArch: noarch
+BuildArch:      noarch
+
+BuildRequires:  maven-local
+BuildRequires:  mvn(junit:junit)
+BuildRequires:  mvn(org.apache.felix:felix)
+BuildRequires:  mvn(org.apache.felix:org.osgi.core)
+BuildRequires:  mvn(org.easymock:easymock)
+BuildRequires:  mvn(org.mockito:mockito-all)
+
 
 %description
 OSGi OBR Service API.
 
 %package javadoc
-Group:          Development/Java
 Summary:        Javadoc for %{name}
 
 %description javadoc
@@ -31,50 +31,57 @@ API documentation for %{name}.
 %prep
 %setup -q -n %{bundle}-%{version}
 
-tar xf %{SOURCE1}
-
-mkdir -p .m2/repository
+%mvn_file ":{*}" felix/@1
 
 %build
-export CLASSPATH=$(build-classpath felix/org.osgi.core)
-ant -Dbuild.sysclasspath=only \
-    -Dmaven.settings.offline=true \
-    -Dmaven.repo.local=.m2/repository \
-    package javadoc
+%mvn_build
 
 %install
-rm -rf %{buildroot}
+%mvn_install
 
-# jars
-install -d -m 0755 %{buildroot}%{_javadir}/felix
-install -m 644 target/%{bundle}-%{version}.jar \
-        %{buildroot}%{_javadir}/felix/%{bundle}.jar
-
-%add_to_maven_depmap org.apache.felix %{bundle} %{version} JPP/felix %{bundle}
-
-# poms
-install -d -m 755 %{buildroot}%{_datadir}/maven2/poms
-install -pm 644 pom.xml \
-%{buildroot}%{_datadir}/maven2/poms/JPP.felix-%{bundle}.pom
-
-# javadoc
-install -d -m 0755 %{buildroot}%{_javadocdir}/%{name}
-cp -pr target/site/api*/* %{buildroot}%{_javadocdir}/%{name}/
-
-%post
-%update_maven_depmap
-
-%postun
-%update_maven_depmap
-
-%files
-%defattr(-,root,root,-)
+%files -f .mfiles
+%dir %{_javadir}/felix
 %doc LICENSE NOTICE
-%{_javadir}/felix/*.jar
-%{_datadir}/maven2/poms/JPP.felix-%{bundle}.pom
-%{_mavendepmapfragdir}/%{name}
 
-%files javadoc
-%defattr(-,root,root,-)
-%{_javadocdir}/%{name}
+%files javadoc -f .mfiles-javadoc
+%doc LICENSE NOTICE
 
+%changelog
+* Tue Aug 06 2013 Michal Srb <msrb@redhat.com> - 1.0.2-11
+- Adapt to current guidelines
+
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.2-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
+* Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.2-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
+* Wed Feb 06 2013 Java SIG <java-devel@lists.fedoraproject.org> - 1.0.2-8
+- Update for https://fedoraproject.org/wiki/Fedora_19_Maven_Rebuild
+- Replace maven BuildRequires with maven-local
+
+* Tue Sep  4 2012 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.0.2-7
+- Install LICENSE and NOTICE with javadoc package
+- Build with maven
+- Move POM file to _mavenpomdir from _datadir/maven2/poms
+- Update to current packaging guidelines
+- Add missing R: java, jpackage-utils
+
+* Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.2-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.2-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
+* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.2-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
+* Mon Dec 13 2010 Alexander Kurtakov <akurtako@redhat.com> 1.0.2-3
+- Fix pom name.
+- Adapt to current guidelines.
+
+* Thu Sep 3 2009 Alexander Kurtakov <akurtako@redhat.com> 1.0.2-2
+- Fix line length.
+
+* Thu Sep 3 2009 Alexander Kurtakov <akurtako@redhat.com> 1.0.2-1
+- Initial package.
