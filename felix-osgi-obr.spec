@@ -3,7 +3,7 @@
 
 Name:           felix-osgi-obr
 Version:        1.0.2
-Release:        11.1%{?dist}
+Release:        11.2
 Summary:        Felix OSGi OBR Service API
 
 License:        ASL 2.0
@@ -13,7 +13,7 @@ BuildArch:      noarch
 
 BuildRequires:  maven-local
 BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.felix:felix)
+BuildRequires:  mvn(org.apache.felix:felix:pom:)
 BuildRequires:  mvn(org.apache.felix:org.osgi.core)
 BuildRequires:  mvn(org.easymock:easymock)
 BuildRequires:  mvn(org.mockito:mockito-all)
