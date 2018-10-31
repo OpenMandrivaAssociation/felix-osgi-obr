@@ -3,7 +3,7 @@
 
 Name:           felix-osgi-obr
 Version:        1.0.2
-Release:        11.2
+Release:        11.3
 Summary:        Felix OSGi OBR Service API
 
 License:        ASL 2.0
