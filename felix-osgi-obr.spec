@@ -7,7 +7,7 @@ Release:        11.3
 Summary:        Felix OSGi OBR Service API
 
 License:        ASL 2.0
-URL:            http://felix.apache.org/site/apache-felix-osgi-bundle-repository.html
+URL:            https://felix.apache.org/site/apache-felix-osgi-bundle-repository.html
 Source0:        http://www.apache.org/dist/felix/org.osgi.service.obr-%{version}-project.tar.gz
 BuildArch:      noarch
 
